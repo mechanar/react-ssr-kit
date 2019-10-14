@@ -27,7 +27,7 @@ const port = process.env.PORT || 3000;
 // To be able to serve static files
 app.use(express.static("public"));
 
-app.get("*", (req, res) => {
+app.get(new RegExp("^((?!(api)).)*$"), (req, res) => {
 	const params = req.params[0].split("/");
 	const id = params[2];
 	// We create store before rendering html

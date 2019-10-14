@@ -15,6 +15,7 @@ export const http = axios.create({
 export const get = async (url, params) => {
 	try {
 		const res = await http.get(url, params);
+		console.log("RES", res);
 		return Promise.resolve(res.data);
 	} catch (error) {
 		return Promise.reject(error);

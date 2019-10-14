@@ -16,7 +16,6 @@ export default (req, store, context) => {
 	);
 	return `<!DOCTYPE html>
             <head>
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             </head>
             <body>
@@ -27,7 +26,6 @@ export default (req, store, context) => {
 										).replace(/</g, "\\u003c")}
                 </script>
                 <script src="/bundle.js"></script>
-                <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
             </body>
     </html>`;
 };
