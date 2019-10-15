@@ -1,10 +1,10 @@
-import React from "react";
-import { renderToString } from "react-dom/server";
-import { StaticRouter } from "react-router-dom";
-import { Provider } from "react-redux";
-import { renderRoutes } from "react-router-config";
-import serialize from "serialize-javascript";
-import Routes from "../client/routes";
+import React from 'react';
+import { renderToString } from 'react-dom/server';
+import { StaticRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { renderRoutes } from 'react-router-config';
+import serialize from 'serialize-javascript';
+import Routes from '../client/routes';
 
 export default (req, store, context) => {
   const content = renderToString(
@@ -21,9 +21,10 @@ export default (req, store, context) => {
             <body>
                 <div id="root">${content}</div>
                 <script>
-                    window.__PRELOADED_STATE__ = ${serialize(
-                      store.getState()
-                    ).replace(/</g, "\\u003c")}
+                    window.__PRELOADED_STATE__ = ${serialize(store.getState()).replace(
+                      /</g,
+                      '\\u003c'
+                    )}
                 </script>
                 <script src="/bundle.js"></script>
             </body>

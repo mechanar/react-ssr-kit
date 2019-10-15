@@ -1,8 +1,8 @@
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
 
-import { appReducer } from "./MainPage";
+import { appReducer } from './MainPage';
 
 export default () =>
-	combineReducers({
-		appReducer
-	});
+  combineReducers({
+    appReducer
+  });

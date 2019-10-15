@@ -1,12 +1,11 @@
-import axios from "axios";
+import axios from 'axios';
 
-export const BASE_URL =
-  process.env.NODE_ENV === "development" ? "/api" : "/api";
+export const BASE_URL = process.env.NODE_ENV === 'development' ? '/api' : '/api';
 
 export const http = axios.create({
   baseURL: BASE_URL,
   headers: {
-    "Content-Type": "application/json"
+    'Content-Type': 'application/json'
   }
 });
 

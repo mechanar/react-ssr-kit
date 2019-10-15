@@ -1,5 +1,5 @@
-import MainPage from "./pages/MainPage";
-import Application from "./Application";
+import MainPage from './pages/MainPage';
+import Application from './Application';
 
 export default [
   {
@@ -7,7 +7,7 @@ export default [
     routes: [
       {
         ...MainPage,
-        path: "/",
+        path: '/',
         exact: true
       }
     ]

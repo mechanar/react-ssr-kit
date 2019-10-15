@@ -1,17 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
-import S from "./App.styles";
+import React from 'react';
+import PropTypes from 'prop-types';
+import S from './App.styles';
 
 export default function App(props) {
   const { warning, primary, danger, big, small, info } = props;
   return (
-    <S.Application
-      warning={warning}
-      primary={primary}
-      danger={danger}
-      big={big}
-      small={small}
-    >
+    <S.Application warning={warning} primary={primary} danger={danger} big={big} small={small}>
       {info}
     </S.Application>
   );
