@@ -1,9 +1,7 @@
 import axios from "axios";
-// TODO: цель - сделать максимально кастомизируемый реквестер даже на разные сервера с разным урлом
 
 export const BASE_URL =
 	process.env.NODE_ENV === "development" ? "/api" : "/api";
-// export const API_BASE = `${BASE_URL}api/v1/insurance/`;
 
 export const http = axios.create({
 	baseURL: BASE_URL,
@@ -15,7 +13,6 @@ export const http = axios.create({
 export const get = async (url, params) => {
 	try {
 		const res = await http.get(url, params);
-		console.log("RES", res);
 		return Promise.resolve(res.data);
 	} catch (error) {
 		return Promise.reject(error);

@@ -4,11 +4,12 @@ import express from "express";
 import React from "react";
 import { matchRoutes } from "react-router-config";
 import compression from "compression";
+import proxy from "http-proxy-middleware";
 import renderer from "./helpers/renderer";
 import Routes from "./client/Routes";
+import store from "./client/redux/store";
 
 const app = express();
-import store from "./client/redux/store";
 
 function shouldCompress(req, res) {
 	if (req.headers["x-no-compression"]) return false;
@@ -26,6 +27,8 @@ const port = process.env.PORT || 3000;
 
 // To be able to serve static files
 app.use(express.static("public"));
+
+app.use("/api", proxy({ target: "http://localhost:3001", changeOrigin: true }));
 
 app.get(new RegExp("^((?!(api)).)*$"), (req, res) => {
 	const params = req.params[0].split("/");
@@ -53,7 +56,7 @@ app.get(new RegExp("^((?!(api)).)*$"), (req, res) => {
 
 	// Wait for all the loadData functions, if they are resolved, send the rendered html to browser.
 	Promise.all(promises).then(() => {
-		const context = { 123: 123 };
+		const context = {};
 		const content = renderer(req, store, context);
 
 		if (context.notFound) {
