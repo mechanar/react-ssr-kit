@@ -1,72 +1,72 @@
 /* eslint-disable no-unused-vars */
-import "@babel/polyfill";
-import express from "express";
-import React from "react";
-import { matchRoutes } from "react-router-config";
-import compression from "compression";
-import proxy from "http-proxy-middleware";
-import renderer from "./helpers/renderer";
-import Routes from "./client/Routes";
-import store from "./client/redux/store";
+import '@babel/polyfill';
+import express from 'express';
+import React from 'react';
+import { matchRoutes } from 'react-router-config';
+import compression from 'compression';
+import proxy from 'http-proxy-middleware';
+import renderer from './helpers/renderer';
+import Routes from './client/routes';
+import store from './client/redux/store';
 
 const app = express();
 
 function shouldCompress(req, res) {
-	if (req.headers["x-no-compression"]) return false;
-	return compression.filter(req, res);
+  if (req.headers['x-no-compression']) return false;
+  return compression.filter(req, res);
 }
 
 app.use(
-	compression({
-		level: 2, // set compression level from 1 to 9 (6 by default)
-		filter: shouldCompress // set predicate to determine whether to compress
-	})
+  compression({
+    level: 2, // set compression level from 1 to 9 (6 by default)
+    filter: shouldCompress // set predicate to determine whether to compress
+  })
 );
 
 const port = process.env.PORT || 3000;
 
 // To be able to serve static files
-app.use(express.static("public"));
+app.use(express.static('public'));
 
-app.use("/api", proxy({ target: "http://localhost:3001", changeOrigin: true }));
+app.use('/api', proxy({ target: 'http://localhost:3001', changeOrigin: true }));
 
-app.get(new RegExp("^((?!(api)).)*$"), (req, res) => {
-	const params = req.params[0].split("/");
-	const id = params[2];
-	// We create store before rendering html
-	// We pass store to renderer
+app.get(new RegExp('^((?!(api)).)*$'), (req, res) => {
+  const params = req.params[0].split('/');
+  const id = params[2];
+  // We create store before rendering html
+  // We pass store to renderer
 
-	// Checks the given path, matches with component and returns array of items about to be rendered
-	const routes = matchRoutes(Routes, req.path);
+  // Checks the given path, matches with component and returns array of items about to be rendered
+  const routes = matchRoutes(Routes, req.path);
 
-	// Execute all loadData functions inside given urls and wrap promises with new promises to be able to render pages all the time
-	// Even if we get an error while loading data, we will still attempt to render page.
-	const promises = routes
-		.map(({ route }) => {
-			return route.loadData ? route.loadData(store, id) : null;
-		})
-		.map(promise => {
-			if (promise) {
-				return new Promise((resolve, reject) => {
-					promise.then(resolve).catch(resolve);
-				});
-			}
-			return null;
-		});
+  // Execute all loadData functions inside given urls and wrap promises with new promises to be able to render pages all the time
+  // Even if we get an error while loading data, we will still attempt to render page.
+  const promises = routes
+    .map(({ route }) => {
+      return route.loadData ? route.loadData(store, id) : null;
+    })
+    .map(promise => {
+      if (promise) {
+        return new Promise((resolve, reject) => {
+          promise.then(resolve).catch(resolve);
+        });
+      }
+      return null;
+    });
 
-	// Wait for all the loadData functions, if they are resolved, send the rendered html to browser.
-	Promise.all(promises).then(() => {
-		const context = {};
-		const content = renderer(req, store, context);
+  // Wait for all the loadData functions, if they are resolved, send the rendered html to browser.
+  Promise.all(promises).then(() => {
+    const context = {};
+    const content = renderer(req, store, context);
 
-		if (context.notFound) {
-			res.status(404);
-		}
+    if (context.notFound) {
+      res.status(404);
+    }
 
-		res.send(content);
-	});
+    res.send(content);
+  });
 });
 
 app.listen(port, () => {
-	console.log(`Listening on port: ${port}`);
+  console.log(`Listening on port: ${port}`);
 });
