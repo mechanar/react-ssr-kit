@@ -31,7 +31,7 @@
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.4",
     "redux-saga": "^1.1.1",
-    "serialize-javascript": "^2.1.0",
+    "serialize-javascript": "^3.1.0",
     "styled-components": "^4.4.0",
     "webpack": "^4.41.1",
     "webpack-cli": "^3.3.9",
